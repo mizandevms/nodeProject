@@ -1,8 +1,14 @@
+// external imprts that means importing from packages
+
 const express = require("express")
 const dotenv = require("dotenv")
 const mongoose = require("mongoose")
 const path = require("path")
 const cookieParser = require("cookie-parser")
+
+// internal imprts that means importing from modules
+
+const {notFoundHandler, errorHandler} = require("./middleware/common/errorHandler")
 
 const app = express()
 dotenv.config()
@@ -22,7 +28,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
 // set vue engine
-app.set("vue emgine", "ejs")
+app.set("view engine", "ejs")
+
 // set static folder
 app.use(express.static(path.join(__dirname, "public")))
 
@@ -30,7 +37,11 @@ app.use(express.static(path.join(__dirname, "public")))
 app.use(cookieParser(process.env.COOKIE_SECRECT))
 
 // routing setup
-// error handle
+// 404 not found error handle
+app.use(notFoundHandler)
+
+// common error handle
+app.use(errorHandler)
 
 // port listern
 app.listen(process.env.PORT, () => {
