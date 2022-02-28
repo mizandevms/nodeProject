@@ -10,6 +10,8 @@ const cookieParser = require("cookie-parser")
 
 const {notFoundHandler, errorHandler} = require("./middleware/common/errorHandler")
 
+const LoginRouter = require("./router/LoginRoutrer")
+
 const app = express()
 dotenv.config()
 
@@ -37,6 +39,8 @@ app.use(express.static(path.join(__dirname, "public")))
 app.use(cookieParser(process.env.COOKIE_SECRECT))
 
 // routing setup
+app.use("/", LoginRouter)
+
 // 404 not found error handle
 app.use(notFoundHandler)
 
