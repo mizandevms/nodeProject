@@ -1,6 +1,6 @@
 function getLogin(req, res, next) {
 	res.render("index", {
-		title: "Chat application login",
+		title: "Login - Chat application ",
 	})
 }
 
