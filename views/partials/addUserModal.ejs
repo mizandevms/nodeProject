@@ -1,0 +1,83 @@
+<div class="modal-wrapper" id="add-user-modal">
+	<div class="modal">
+		<a href="#" onclick="closeModal()" class="modal-close">+</a>
+		<div class="modal-title">
+			<h2>Create New User</h2>
+		</div>
+		<div class="modal-body">
+			<form method="post" action="/users" enctype="multipart/form-data" id="add-user-form">
+				<input type="text" placeholder="enter name" name="name" />
+				<p class="error show name-error">This is error</p>
+				<input type="text" placeholder="enter email" name="email" />
+				<p class="error email-error">This is error</p>
+				<input type="text" placeholder="enter mobile" name="mobile" />
+				<p class="error mobile-error">This is error</p>
+				<input type="password" placeholder="enter password" name="password" />
+				<p class="error password-error">This is error</p>
+				<input type="file" name="avatar" />
+				<p class="error avatar-error">This is error</p>
+
+				<p class="error common-error">This is error</p>
+
+				<input type="submit" value="Submit" />
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+	const modal = document.querySelector("#add-user-modal")
+	function closeModal() {
+		modal.style.display = "none"
+	}
+	function openModal() {
+		modal.style.display = "block"
+	}
+
+	// success toast
+
+	const successToast = Toastify({
+		text: "user added successfully",
+		duration: 1000,
+	})
+
+	// form submit
+	form.onsubmit = async function (event) {
+		event.preventDefault()
+
+		// prepare form data
+		const formData = new FormData(form)
+
+		// send request to server
+		let response = await fetch("/users", {
+			method: "post",
+			body: formData,
+		})
+		// response
+		let result = await response.json()
+
+		// handle errr and response
+		if (result.error) {
+			// error
+			Object.keys(result.error).forEach((fieldName) => {
+				form[fieldName].classList.add("error")
+
+				const errorPlaceHolder = document.querySelector(`.${fieldName}-error`)
+
+				errorPlaceHolder.textContent = result.error[fieldName].msg
+
+				errorPlaceHolder.style.display = "block"
+			})
+		} else {
+			// success
+			successToast.showToast()
+			closeModal()
+			document.querySelector("p.error").style.display = "none"
+
+			// reload the page
+
+			setTimeout(() => {
+				location.reload()
+			}, 1000)
+		}
+	}
+</script>
